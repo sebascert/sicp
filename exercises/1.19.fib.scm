@@ -1,15 +1,19 @@
 (define (log-fib n)
-  (log-fib-iter 1 0 0 1 n))
+ (log-fib-iter 1 0 0 1 n))
+
 (define (log-fib-iter a b p q count)
-  (cond ((= count 0) b)
-        ((even? count)
-         (log-fib-iter a b (+ (* p p) (* q q)) (+ (* q q) (* 2 (* q p))) (/ count 2)))
-        (else
-         (log-fib-iter (+ (* b q) (* a q) (* a p))
-                       (+ (* b p) (* a q))
-                       p
-                       q
-                       (- count 1)))))
+ (cond
+  ((= count 0)
+   b)
+  ((even? count)
+   (log-fib-iter a b (+ (* p p) (* q q)) (+ (* q q) (* 2 (* q p))) (/ count 2)))
+  (else
+   (log-fib-iter (+ (* b q) (* a q) (* a p))
+                 (+ (* b p) (* a q))
+                 p
+                 q
+                 (- count 1)))))
+
 (test (log-fib 0) 0)
 (test (log-fib 1) 1)
 (test (log-fib 2) 1)

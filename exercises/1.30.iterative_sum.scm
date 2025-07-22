@@ -1,13 +1,17 @@
-(define (sum term a next b)
-  (define (iter a result)
-    (if (> a b)
-        result
-        (iter (next a) (+ result (term a)))))
-  (iter a 0))
 (define (identity x)
-  x)
+ x)
+
 (define (plus-2 x)
-  (+ x 2))
+ (+ x 2))
+
+(define (sum term a next b)
+ (define (iter a result)
+  (if (> a b)
+   result
+   (iter (next a) (+ result (term a)))))
+
+ (iter a 0))
+
 (test (sum square 0 ++ 5) 55)
 (test (sum identity 1 ++ 5) 15)
 (test (sum square 1 ++ 3) 14)

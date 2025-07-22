@@ -1,11 +1,14 @@
 (define (cube x)
-  (* x x x))
+ (* x x x))
+
 (define (p x)
-  (- (* 3 x) (* 4 (cube x))))
+ (- (* 3 x) (* 4 (cube x))))
+
 (define (sine angle)
-  (if (not (> (abs angle) .1))
-      angle
-      (p (sine (/ angle 3.)))))
+ (if (not (> (abs angle) |.1|))
+  angle
+  (p (sine (/ angle 3.0)))))
+
 ; 5 times
 (sine 12.15)
 ; The order of growth of the number of steps is linear as on each iteration the
