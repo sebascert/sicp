@@ -15,6 +15,10 @@
     (- x 1))
   (= (remainder b a) 0))
 ; functions
+(define (sign x)
+  (if (< x 0)
+      -1
+      1))
 (define (square x)
   (* x x))
 (define (cube x)
