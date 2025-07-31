@@ -9,3 +9,11 @@
    (display " expected: ")
    (display expected)))
  (newline))
+
+(define (time f)
+ (lambda args
+  (let ((start (runtime)))
+   (let ((result (apply f args)))
+    (display (- (runtime) start))
+    (newline)
+    result))))
