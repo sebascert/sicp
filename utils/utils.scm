@@ -3,3 +3,4 @@
 (load "utils/math.scm")
 (load "utils/prime.scm")
 (load "utils/test.scm")
+(load "utils/high_order.scm")
