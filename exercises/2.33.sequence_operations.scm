@@ -10,7 +10,7 @@
 (define (map p sequence)
  (accumulate (lambda (x y)
               (cons (p x) y))
-             '()
+             nil
              sequence))
 
 (define l (list 1 2 3 4 5 6))

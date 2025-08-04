@@ -16,7 +16,7 @@
  (map write-line mat))
 
 (define (transpose mat)
- (accumulate-n cons '() mat))
+ (accumulate-n cons nil mat))
 
 (define vec (list 1 2 3))
 (define matrix (list (list 1 2 3) (list 4 5 6) (list 7 8 9)))
