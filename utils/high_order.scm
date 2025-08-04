@@ -1,3 +1,4 @@
+(load "utils/enumerators.scm")
 (define (accumulate op initial sequence)
  (if (null? sequence)
   initial
@@ -8,20 +9,6 @@
   nil
   (cons (accumulate op init (map car seqs))
         (accumulate-n op init (map cdr seqs)))))
-
-(define (enumerate-interval low high)
- (if (> low high)
-  nil
-  (cons low (enumerate-interval (+ low 1) high))))
-
-(define (enumerate-tree tree)
- (cond
-  ((null? tree)
-   nil)
-  ((not (pair? tree))
-   (list tree))
-  (else
-   (append (enumerate-tree (car tree)) (enumerate-tree (cdr tree))))))
 
 (define (filter predicate sequence)
  (cond
@@ -47,3 +34,6 @@
  (filter (lambda (x)
           (not (= x item)))
          sequence))
+
+(define (sum seq)
+ (accumulate + 0 seq))
