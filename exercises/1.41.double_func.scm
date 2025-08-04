@@ -2,4 +2,4 @@
  (lambda (x)
   (f (f x))))
 
-(write-line (((double (double double)) ++) 5))
+(print-line (((double (double double)) ++) 5))

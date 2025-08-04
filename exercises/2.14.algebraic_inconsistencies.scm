@@ -14,9 +14,9 @@
 (define (inspect-interval i)
  (print-interval i)
  (print-center-percentage i)
- (write-line " i/i int")
+ (print-line " i/i int")
  (print-interval (div-interval i i))
- (write-line " i/i cp")
+ (print-line " i/i cp")
  (print-center-percentage (div-interval i i))
  (newline))
 
@@ -54,15 +54,15 @@
 
 (define (print-center-percentage cp)
  (display "center ")
- (write-line (center cp))
+ (print-line (center cp))
  (display "percentage ")
- (write-line (percentage cp)))
+ (print-line (percentage cp)))
 
 (define (print-interval i)
  (display "lower ")
- (write-line (lower-bound i))
+ (print-line (lower-bound i))
  (display "upper ")
- (write-line (upper-bound i)))
+ (print-line (upper-bound i)))
 
 (define (sub-interval a b)
  (add-interval a (neg-interval b)))

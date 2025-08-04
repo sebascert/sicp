@@ -13,14 +13,14 @@
       m))
 
 (define (print-matrix mat)
- (map write-line mat))
+ (map print-line mat))
 
 (define (transpose mat)
  (accumulate-n cons nil mat))
 
 (define vec (list 1 2 3))
 (define matrix (list (list 1 2 3) (list 4 5 6) (list 7 8 9)))
-(write-line (matrix-*-vector matrix vec))
+(print-line (matrix-*-vector matrix vec))
 (newline)
 (print-matrix (transpose matrix))
 (newline)

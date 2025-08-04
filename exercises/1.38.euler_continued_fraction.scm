@@ -12,18 +12,18 @@
 
  (iter k 0))
 
-(write-line euler)
-(write-line (+ 2
+(print-line euler)
+(print-line (+ 2
                (k-continued-fraction (lambda (i)
                                       1.0)
                                      euler-denom
                                      1)))
-(write-line (+ 2
+(print-line (+ 2
                (k-continued-fraction (lambda (i)
                                       1.0)
                                      euler-denom
                                      5)))
-(write-line (+ 2
+(print-line (+ 2
                (k-continued-fraction (lambda (i)
                                       1.0)
                                      euler-denom

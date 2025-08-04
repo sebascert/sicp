@@ -18,5 +18,5 @@
   (+ (simpson-integral-k 0) (simpson-integral-k n) (simpson-integral-iter 1 0))))
 
 ; TODO test for floating point
-(write-line (simpson-integral cube 0 1 100))
-(write-line (simpson-integral cube 0 1 1000))
+(print-line (simpson-integral cube 0 1 100))
+(print-line (simpson-integral cube 0 1 1000))

@@ -1,4 +1,4 @@
-(define tolerance |.00001|)
+(define tolerance 1e-05)
 (define (fixed-point f first-guess)
  (define (close-enough? v1 v2)
   (< (abs (- v1 v2)) tolerance))
@@ -11,7 +11,7 @@
 
  (try first-guess))
 
-(define dx |.00001|)
+(define dx 1e-05)
 (define (cubic a b c)
  (lambda (x)
   (+ (cube x) (* (square x) a) (* x b) c)))
@@ -30,7 +30,7 @@
 (define (newtons-method g guess)
  (fixed-point (newton-transform g) guess))
 
-(write-line (cubic-nm-root 0 0 0))
-(write-line (cubic-nm-root 1 1 1))
-(write-line (cubic-nm-root 1 -1 -1))
-(write-line (cubic-nm-root -6 11 -6))
+(print-line (cubic-nm-root 0 0 0))
+(print-line (cubic-nm-root 1 1 1))
+(print-line (cubic-nm-root 1 -1 -1))
+(print-line (cubic-nm-root -6 11 -6))

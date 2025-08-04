@@ -1,4 +1,4 @@
-(define tolerance |.00001|)
+(define tolerance 1e-05)
 (define (fixed-point f first-guess)
  (define (close-enough? v1 v2)
   (< (abs (- v1 v2)) tolerance))
@@ -16,5 +16,5 @@
                (+ 1 (/ 1 x)))
               1.0))
 
-(write-line golden-ratio)
-(write-line (golden-ratio-aprox))
+(print-line golden-ratio)
+(print-line (golden-ratio-aprox))

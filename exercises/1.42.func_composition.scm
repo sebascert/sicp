@@ -2,4 +2,4 @@
  (lambda (x)
   (f (g x))))
 
-(write-line ((compose square ++) 6))
+(print-line ((compose square ++) 6))

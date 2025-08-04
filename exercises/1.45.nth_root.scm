@@ -7,7 +7,7 @@
   (f (g x))))
 
 (define (fixed-point f first-guess)
- (define tolerance |.00001|)
+ (define tolerance 1e-05)
  (define (close-enough? v1 v2)
   (< (abs (- v1 v2)) tolerance))
 
@@ -34,13 +34,13 @@
 
  (iter 1 f))
 
-(write-line (nth-root 4 2))
-(write-line (nth-root 8 3))
-(write-line (nth-root 16 4))
-(write-line (nth-root 32 5))
-(write-line (nth-root 27 3))
-(write-line (nth-root 729 6))
-(write-line (nth-root |.25| 2))
-(write-line (nth-root |.125| 3))
-(write-line (nth-root 5 1))
-(write-line (nth-root -8 3))
+(print-line (nth-root 4 2))
+(print-line (nth-root 8 3))
+(print-line (nth-root 16 4))
+(print-line (nth-root 32 5))
+(print-line (nth-root 27 3))
+(print-line (nth-root 729 6))
+(print-line (nth-root 0.25 2))
+(print-line (nth-root 0.125 3))
+(print-line (nth-root 5 1))
+(print-line (nth-root -8 3))

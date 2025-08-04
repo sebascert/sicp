@@ -10,4 +10,4 @@
 
  (iter 1 f))
 
-(write-line ((repeated square 2) 5))
+(print-line ((repeated square 2) 5))

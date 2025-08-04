@@ -9,9 +9,9 @@
   (else
    (ackermann (- x 1) (ackermann x (- y 1))))))
 
-(write-line (ackermann 1 10))
-(write-line (ackermann 2 4))
-(write-line (ackermann 3 3))
+(print-line (ackermann 1 10))
+(print-line (ackermann 2 4))
+(print-line (ackermann 3 3))
 ; f(n) = 2n
 (define (f n)
  (ackermann 0 n))
@@ -25,6 +25,6 @@
 (define (h n)
  (ackermann 2 n))
 
-(write-line (f 5))
-(write-line (g 5))
-(write-line (h 4))
+(print-line (f 5))
+(print-line (g 5))
+(print-line (h 4))

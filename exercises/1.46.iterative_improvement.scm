@@ -18,15 +18,15 @@
 
  ((iterative-improvement (percent-good-enough 1) improve) 1))
 
-(write-line (sqrt 4.0))
-(define tolerance |.00001|)
+(print-line (sqrt 4.0))
+(define tolerance 1e-05)
 (define (fixed-point f first-guess)
- ((iterative-improvement (percent-good-enough |.1|) f) first-guess))
+ ((iterative-improvement (percent-good-enough 0.1) f) first-guess))
 
 (define (golden-ratio-aprox)
  (fixed-point (lambda (x)
                (+ 1 (/ 1 x)))
               1.0))
 
-(write-line golden-ratio)
-(write-line (golden-ratio-aprox))
+(print-line golden-ratio)
+(print-line (golden-ratio-aprox))

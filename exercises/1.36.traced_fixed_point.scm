@@ -1,11 +1,11 @@
-(define tolerance |.00001|)
+(define tolerance 1e-05)
 (define (traced-fixed-point f first-guess)
  (define (close-enough? v1 v2)
   (< (abs (- v1 v2)) tolerance))
 
  (define (try guess)
   (let ((next (f guess)))
-   (write-line guess)
+   (print-line guess)
    (if (close-enough? guess next)
     next
     (try next))))

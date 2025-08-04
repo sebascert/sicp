@@ -30,8 +30,8 @@
  (* 4 (len-rect rect)))
 
 (define rectangle (make-rect (make-point 0 0) 1))
-(write-line (perimeter rectangle))
-(write-line (area rectangle))
+(print-line (perimeter rectangle))
+(print-line (area rectangle))
 (define rectangle (make-rect (make-point 0 0) 5))
-(write-line (perimeter rectangle))
-(write-line (area rectangle))
+(print-line (perimeter rectangle))
+(print-line (area rectangle))

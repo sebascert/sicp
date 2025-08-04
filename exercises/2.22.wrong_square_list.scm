@@ -17,5 +17,5 @@
 
  (iter items ()))
 
-(write-line (square-list1 nums))
-(write-line (square-list2 nums))
+(print-line (square-list1 nums))
+(print-line (square-list2 nums))

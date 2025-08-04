@@ -1,0 +1,10 @@
+(define (target-sum-triplets n s)
+ (filter (lambda (t)
+          (= (sum t) s))
+         (enumerate-unique-tuples n 3)))
+
+(map print-line (target-sum-triplets 6 6))
+(newline)
+(map print-line (target-sum-triplets 6 12))
+(newline)
+(map print-line (target-sum-triplets 10 20))

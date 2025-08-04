@@ -7,7 +7,7 @@
  (iter initial sequence))
 
 ; commutative operations evaluate the same for fold-left and fold-right
-(write-line (fold-right / 1 (list 1 2 3)))
-(write-line (fold-left / 1 (list 1 2 3)))
-(write-line (fold-right list nil (list 1 2 3)))
-(write-line (fold-left list nil (list 1 2 3)))
+(print-line (fold-right / 1 (list 1 2 3)))
+(print-line (fold-left / 1 (list 1 2 3)))
+(print-line (fold-right list nil (list 1 2 3)))
+(print-line (fold-left list nil (list 1 2 3)))

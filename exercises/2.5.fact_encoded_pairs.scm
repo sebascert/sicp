@@ -20,6 +20,6 @@
  (* (expt car-base x) (expt cdr-base y)))
 
 (define pair (cons 0 1))
-(write-line pair)
+(print-line pair)
 (test (car pair) 0)
 (test (cdr pair) 1)
