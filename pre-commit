@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Get the list of staged files
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(md|scm)')
+
+# If no files match, skip
+[ -z "$FILES" ] && exit 0
+
+if ! dprint check $FILES; then
+    echo "🚫 Commit aborted. Run 'dprint fmt' to fix formatting."
+    exit 1
+fi
+
+exit 0
