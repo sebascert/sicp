@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (flip-horiz painter)
  (transform-painter painter
                     (make-vect 1.0 0.0)

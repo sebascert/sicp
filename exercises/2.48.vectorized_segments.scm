@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (end-segment segment)
  (cdr segment))
 

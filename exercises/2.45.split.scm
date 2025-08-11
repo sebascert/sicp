@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (split sp1 sp2)
  (define (sp painter n)
   (if (= n 0)

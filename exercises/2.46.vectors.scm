@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (add-vect a b)
  (make-vect (+ (xcor-vect a) (xcor-vect b)) (+ (ycor-vect a) (ycor-vect b))))
 

@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (corner-split painter n)
  (if (= n 0)
   painter

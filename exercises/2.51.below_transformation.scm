@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (below1 painter1 painter2)
  (let ((split-point (make-vect 0.0 0.5)))
   (let ((paint-bottom (transform-painter painter1

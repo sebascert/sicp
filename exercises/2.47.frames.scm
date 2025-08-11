@@ -1,3 +1,4 @@
+(load "packages.picture_language.scm")
 (define (edge1-frame1 frame)
  (cadr frame))
 
