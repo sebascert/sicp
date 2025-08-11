@@ -1,13 +1,4 @@
-(define (add-interval x y)
- (make-interval (+ (lower-bound x) (lower-bound y))
-                (+ (upper-bound x) (upper-bound y))))
-
-(define (lower-bound int)
- (car int))
-
-(define (make-interval a b)
- (cons a b))
-
+(load "packages/interval_arithmetic.scm")
 (define (neg-interval int)
  (make-interval (- (upper-bound int)) (- (lower-bound int))))
 
@@ -25,9 +16,6 @@
   (test (lower-bound res) (lower-bound expected))
   (test (lower-bound res) (lower-bound nres))
   (test (upper-bound res) (upper-bound nres))))
-
-(define (upper-bound int)
- (cdr int))
 
 (test-sub-interval (make-interval -1 1)
                    (make-interval -1 1)

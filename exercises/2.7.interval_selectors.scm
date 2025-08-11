@@ -1,8 +1,6 @@
+(load "packages/interval_arithmetic.scm")
 (define (lower-bound int)
  (car int))
-
-(define (make-interval a b)
- (cons a b))
 
 (define (upper-bound int)
  (cdr int))

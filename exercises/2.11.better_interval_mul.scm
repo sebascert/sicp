@@ -1,19 +1,4 @@
-(define (add-interval x y)
- (make-interval (+ (lower-bound x) (lower-bound y))
-                (+ (upper-bound x) (upper-bound y))))
-
-(define (div-interval x y)
- (if (= 0 (- (lower-bound y) (upper-bound y)))
-  (error "division by interval of length 0")
-  (mul-interval x
-                (make-interval (/ 1.0 (upper-bound y)) (/ 1.0 (lower-bound y))))))
-
-(define (lower-bound int)
- (car int))
-
-(define (make-interval a b)
- (cons a b))
-
+(load "packages/interval_arithmetic.scm")
 (define (mul-interval x y)
  (let ((xl (lower-bound x))
        (xu (upper-bound x))
@@ -76,19 +61,10 @@
    (else
     (error "Unexpected sign combination")))))
 
-(define (neg-interval int)
- (make-interval (- (upper-bound int)) (- (lower-bound int))))
-
-(define (sub-interval a b)
- (add-interval a (neg-interval b)))
-
 (define (test-mul-interval inta intb expected)
  (let ((mul (mul-interval inta intb)))
   (test (lower-bound mul) (lower-bound expected))
   (test (upper-bound mul) (upper-bound expected))))
-
-(define (upper-bound int)
- (cdr int))
 
 (test-mul-interval (make-interval 1 2) (make-interval 3 4) (make-interval 3 8))
 (test-mul-interval (make-interval 1 2)

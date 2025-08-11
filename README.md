@@ -16,7 +16,7 @@ implemented using the **MIT/GNU Scheme** compiler.
 .
 ├── exercises/      # Main SICP exercise solutions
 ├── utils/          # Shared helper code (e.g., math, IO, testing utilities)
-├── interesting/    # Bonus code worth keeping
+├── packages/       # Packages for exercises
 ├── dprint.json     # Dprint configuration for formatting sources
 └── run.sh          # Helper script to run exercises
 ```

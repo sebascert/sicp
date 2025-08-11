@@ -25,8 +25,3 @@
     50)))
 
  (cc amount 5))
-
-(test (count-change 100) 292)
-(test (count-change 200) 2435)
-(test (count-change 300) 9590)
-(test (count-change 400) 26517)
