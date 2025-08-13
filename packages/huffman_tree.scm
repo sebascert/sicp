@@ -19,7 +19,7 @@
 (define (decode bits tree)
  (define (decode-1 bits current-branch)
   (if (null? bits)
-   '()
+   nil
    (let ((next-branch (choose-branch (car bits) current-branch)))
     (if (leaf? next-branch)
      (cons (symbol-leaf next-branch) (decode-1 (cdr bits) tree))
@@ -45,7 +45,7 @@
     (error "symbol not found:" symbol))))
 
  (if (null? message)
-  '()
+  nil
   (append (encode-symbol (car message) tree) (encode (cdr message) tree))))
 
 (define (generate-huffman-tree pairs)
@@ -74,7 +74,7 @@
 
 (define (make-leaf-set pairs)
  (if (null? pairs)
-  '()
+  nil
   (let ((pair (car pairs)))
    (adjoin-set (make-leaf (car pair) (cadr pair)) (make-leaf-set (cdr pairs))))))
 

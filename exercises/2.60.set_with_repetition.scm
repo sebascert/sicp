@@ -14,7 +14,7 @@
  (cond
   ((or (null? set1)
        (null? set2))
-   '())
+   nil)
   ((element-of-set? (car set1) set2)
    (cons (car set1) (intersection-set (cdr set1) set2)))
   (else

@@ -7,7 +7,7 @@
 (define (list->tree elements)
  (define (partial-tree elts n)
   (if (= n 0)
-   (cons '() elts)
+   (cons nil elts)
    (let ((left-size (quotient (- n 1) 2)))
     (let ((left-result (partial-tree elts left-size)))
      (let ((left-tree (car left-result))
@@ -53,7 +53,7 @@
     (left-branch tree)
     (cons (entry tree) (copy-to-list (right-branch tree) result-list)))))
 
- (copy-to-list tree '()))
+ (copy-to-list tree nil))
 
 (define (union-set set1 set2)
  (list->tree (merge-sorted-lists (tree->list set1) (tree->list set2))))

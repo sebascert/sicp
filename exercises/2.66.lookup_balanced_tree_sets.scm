@@ -1,6 +1,6 @@
 (define (lookup given-key set-of-records)
  (if (null? set-of-records)
-  '()
+  nil
   (let ((record (entry set-of-records)))
    (cond
     ((< given-key (key record))

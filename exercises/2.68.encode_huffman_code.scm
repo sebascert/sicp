@@ -17,7 +17,7 @@
     (error "symbol not found:" symbol))))
 
  (if (null? message)
-  '()
+  nil
   (append (encode-symbol (car message) tree) (encode (cdr message) tree))))
 
 (define sample-tree

@@ -19,7 +19,7 @@
    (cons (car set1) (union-set (cdr set1) set2)))))
 
 (test (union-set '(1 2 3) '(3 4 5)) '(1 2 3 4 5))
-(test (union-set '() '(1 2 3)) '(1 2 3))
-(test (union-set '(1 2 3) '()) '(1 2 3))
+(test (union-set nil '(1 2 3)) '(1 2 3))
+(test (union-set '(1 2 3) nil) '(1 2 3))
 (test (union-set '(1 2 3) '(4 5 6)) '(1 2 3 4 5 6))
 (test (union-set '(3 2 1) '(1 2 3)) '(1 2 3))
