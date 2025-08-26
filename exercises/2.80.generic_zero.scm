@@ -1,0 +1,10 @@
+(load "packages/generic_arithmetic.scm")
+; the implementation is in the package
+(test (zero? (make-scheme-number 0)) #t)
+(test (zero? (make-scheme-number 5)) #f)
+(test (zero? (make-rational 0 3)) #t)
+(test (zero? (make-rational 2 3)) #f)
+(test (zero? (make-complex-from-real-imag 0 0)) #t)
+(test (zero? (make-complex-from-real-imag 0 1)) #f)
+(test (zero? (make-complex-from-mag-ang 0 0)) #t)
+(test (zero? (make-complex-from-mag-ang 5 1.0)) #f)
