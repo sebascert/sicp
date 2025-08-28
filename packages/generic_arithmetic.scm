@@ -183,6 +183,10 @@
       '(rational)
       (lambda (x)
        (equ? x zero)))
+ (put 'raise
+      '(rational)
+      (lambda (x)
+       (make-complex-from-real-imag (/ (numer x) (denom x)) 0)))
  'done)
 
 (define (install-rectangular-package)
@@ -265,6 +269,10 @@
       '(scheme-number)
       (lambda (x)
        (= x 0)))
+ (put 'raise
+      '(scheme-number)
+      (lambda (x)
+       (make-rational x 1)))
  'done)
 
 (define (magnitude z)
@@ -284,6 +292,9 @@
 
 (define (mul x y)
  (apply-generic 'mul x y))
+
+(define (raise num)
+ (apply-generic 'raise num))
 
 (define (real-part z)
  (apply-generic 'real-part z))

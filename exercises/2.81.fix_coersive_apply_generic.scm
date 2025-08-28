@@ -1,5 +1,6 @@
-; Examples of put and get from section 2.4
-(load "packages/table.scm")
+(load "packages/data_directed_programming.scm")
+; a. In the missing operation case there would be an infinite recursion.
+; b. In the found operation case it would behave as expected.
 (define (apply-generic op . args)
  (let ((type-tags (map type-tag args)))
   (let ((proc (get op type-tags)))
@@ -25,36 +26,24 @@
     (else
      (error "No method for these types" (list op type-tags)))))))
 
-(define (attach-tag type-tag contents)
- (cons type-tag contents))
-
-(define (contents datum)
- (if (pair? datum)
-  (cdr datum)
-  (error "Bad tagged datum: CONTENTS" datum)))
-
-(define (ddp-table-key op type)
- (list op type))
-
-(define (get op type)
- (let ((entry (get-table-entry DDP-TABLE (ddp-table-key op type))))
-  (if entry
-   (entry-value entry)
-   entry)))
-
 (define (get-coercion t1 t2)
  (get 'coercion (list t1 t2)))
-
-(define (put op type proc)
- (set! DDP-TABLE
-       (set-table-entry DDP-TABLE (make-entry (ddp-table-key op type) proc))))
 
 (define (put-coercion t1 t2 proc)
  (put 'coercion (list t1 t2) proc))
 
-(define (type-tag datum)
- (if (pair? datum)
-  (car datum)
-  (error "Bad tagged datum: TYPE-TAG" datum)))
-
-(define DDP-TABLE nil)
+(define a (attach-tag 'a 1))
+(define b (attach-tag 'b 2))
+(put-coercion 'a
+              'a
+              (lambda (a)
+               (attach-tag 'a 1)))
+(put-coercion 'b
+              'a
+              (lambda (b)
+               (attach-tag 'a 1)))
+(put 'op '(A A) print-line)
+(apply-generic 'op a a)
+(apply-generic 'nop a a)
+(apply-generic 'op a b)
+(apply-generic 'op b a)
