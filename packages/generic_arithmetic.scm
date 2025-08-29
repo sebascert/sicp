@@ -5,8 +5,41 @@
 (define (angle z)
  (apply-generic 'angle z))
 
+(define (apply-generic op . args)
+ (define (fail args)
+  (error "No method for these types" args))
+
+ (let ((type-tags (map type-tag args)))
+  (let ((proc (get op type-tags)))
+   (cond
+    (proc
+     (drop (apply proc (map contents args))))
+    ((= (length args) 1)
+     (let ((raised (raise (car args))))
+      (if raised
+       (apply-generic op raised)
+       (fail))))
+    ((= (length args) 2)
+     (let ((a1 (car args))
+           (a2 (cadr args)))
+      (let ((low (order < a1 a2))
+            (high (order > a1 a2)))
+       (cond
+        ((not low)
+         (fail))
+        (else
+         (apply-generic op high (raise low)))))))
+    (else
+     (fail))))))
+
 (define (div x y)
  (apply-generic 'div x y))
+
+(define (drop num)
+ (let ((projection (project num)))
+  (if projection
+   (drop projection)
+   num)))
 
 (define (equ? a b)
  (apply-generic 'equ? a b))
@@ -73,6 +106,11 @@
  (put 'angle '(complex) angle)
  (put 'equ? '(complex complex) equ?)
  (put 'zero? '(complex) zero?)
+ (put 'level
+      '(complex)
+      (lambda (x)
+       3))
+ (put 'project '(complex) project)
  'done)
 
 (define (install-polar-package)
@@ -95,6 +133,11 @@
 
  (define (make-from-real-imag x y)
   (cons (sqrt (+ (square x) (square y))) (atan y x)))
+
+ (define (project-to-rational x)
+  (if (= 0 (imag-part x))
+   (make-rational (magnitude x) 1)
+   #f))
 
  (define (real-part z)
   (* (magnitude z) (cos (angle z))))
@@ -121,6 +164,7 @@
       '(polar)
       (lambda (x)
        (equ? x zero)))
+ (put 'project '(polar) project-to-rational)
  'done)
 
 (define (install-rational-package)
@@ -139,6 +183,11 @@
   (and (= (numer a) (numer b))
        (= (denom a) (denom b))))
 
+ (define (inv-rat x)
+  (if (= 0 (numer x))
+   (error "Division by zero" x)
+   (make-rat (denom x) (numer x))))
+
  (define (make-rat n d)
   (let ((g (gcd n d)))
    (cons (/ n g) (/ d g))))
@@ -148,6 +197,9 @@
 
  (define (numer x)
   (car x))
+
+ (define (project-to-scheme-number x)
+  (make-scheme-number (/ (numer x) (denom x))))
 
  (define (sub-rat x y)
   (make-rat (- (* (numer x) (denom y)) (* (numer y) (denom x)))
@@ -174,6 +226,10 @@
       '(rational rational)
       (lambda (x y)
        (tag (div-rat x y))))
+ (put 'inv
+      '(rational)
+      (lambda (x)
+       (tag (inv-rat x))))
  (put 'make
       'rational
       (lambda (n d)
@@ -187,6 +243,11 @@
       '(rational)
       (lambda (x)
        (make-complex-from-real-imag (/ (numer x) (denom x)) 0)))
+ (put 'level
+      '(rational)
+      (lambda (x)
+       2))
+ (put 'project '(rational) project-to-scheme-number)
  'done)
 
 (define (install-rectangular-package)
@@ -209,6 +270,11 @@
 
  (define (make-from-real-imag x y)
   (cons x y))
+
+ (define (project-to-rational x)
+  (if (= 0 (imag-part x))
+   (make-rational (real-part x) 1)
+   #f))
 
  (define (real-part z)
   (car z))
@@ -235,6 +301,7 @@
       '(rectangular)
       (lambda (x)
        (equ? x zero)))
+ (put 'project '(rectangular) project-to-rational)
  'done)
 
 (define (install-scheme-number-package)
@@ -273,7 +340,17 @@
       '(scheme-number)
       (lambda (x)
        (make-rational x 1)))
+ (put 'level
+      '(scheme-number)
+      (lambda (x)
+       1))
  'done)
+
+(define (inv x)
+ (apply-generic 'inv x))
+
+(define (level num)
+ (safe-apply-generic 'level num))
 
 (define (magnitude z)
  (apply-generic 'magnitude z))
@@ -293,8 +370,25 @@
 (define (mul x y)
  (apply-generic 'mul x y))
 
+(define (order cmp a b)
+ (let ((la (level a))
+       (lb (level b)))
+  (cond
+   ((or (not la)
+        (not lb))
+    #f)
+   ((cmp la lb)
+    a)
+   ((cmp lb la)
+    b)
+   (else
+    #f))))
+
+(define (project num)
+ (safe-apply-generic 'project num))
+
 (define (raise num)
- (apply-generic 'raise num))
+ (safe-apply-generic 'raise num))
 
 (define (real-part z)
  (apply-generic 'real-part z))

@@ -1,6 +1,9 @@
 ; Examples of put and get from section 2.4
 (load "packages/table.scm")
 (define (apply-generic op . args)
+ (define (fail args)
+  (error "No method for these types" args))
+
  (let ((type-tags (map type-tag args)))
   (let ((proc (get op type-tags)))
    (cond
@@ -15,15 +18,15 @@
             (t2->t1 (get-coercion type2 type1)))
        (cond
         ((eq? type1 type2)
-         (error "No method for these types" (list op type-tags)))
+         (fail (list op type-tags)))
         (t1->t2
          (apply-generic op (t1->t2 a1) a2))
         (t2->t1
          (apply-generic op a1 (t2->t1 a2)))
         (else
-         (error "No method for these types" (list op type-tags)))))))
+         (fail (list op type-tags)))))))
     (else
-     (error "No method for these types" (list op type-tags)))))))
+     (fail (list op type-tags)))))))
 
 (define (attach-tag type-tag contents)
  (cons type-tag contents))
@@ -51,6 +54,20 @@
 
 (define (put-coercion t1 t2 proc)
  (put 'coercion (list t1 t2) proc))
+
+(define (safe-apply-generic op . args)
+ (let ((type-tags (map safe-type-tag args)))
+  (if (member #f type-tags)
+   #f
+   (let ((proc (get op type-tags)))
+    (if proc
+     (apply proc (map contents args))
+     #f)))))
+
+(define (safe-type-tag datum)
+ (if (pair? datum)
+  (car datum)
+  #f))
 
 (define (type-tag datum)
  (if (pair? datum)

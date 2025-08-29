@@ -1,0 +1,9 @@
+(load "packages/generic_arithmetic.scm")
+; implementation in generic_arithmetic
+(define two (make-scheme-number 2))
+(define int (make-scheme-number 1))
+(define rat (make-rational 2 2))
+(define cpx (make-complex-from-real-imag 1 0))
+(test (add int int) two)
+(test (add int cpx) two)
+(test (add rat cpx) two)
