@@ -5,5 +5,6 @@
 (define rat (make-rational 2 2))
 (define cpx (make-complex-from-real-imag 1 0))
 (test (add int int) two)
+(test (add int rat) two)
 (test (add int cpx) two)
 (test (add rat cpx) two)

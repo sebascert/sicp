@@ -56,30 +56,10 @@
 (define (install-complex-package)
  ;; imported procedures from rectangular and polar packages
  (define (make-from-mag-ang r a)
-  (let ((r (cond
-            ((number? r)
-             (make-scheme-number r))
-            (else
-             r)))
-        (a (cond
-            ((number? a)
-             (make-scheme-number a))
-            (else
-             a))))
-   ((get 'make-from-mag-ang 'polar) r a)))
+  ((get 'make-from-mag-ang 'polar) r a))
 
  (define (make-from-real-imag x y)
-  (let ((x (cond
-            ((number? x)
-             (make-scheme-number x))
-            (else
-             x)))
-        (y (cond
-            ((number? y)
-             (make-scheme-number y))
-            (else
-             y))))
-   ((get 'make-from-real-imag 'rectangular) x y)))
+  ((get 'make-from-real-imag 'rectangular) x y))
 
  ;; internal procedures
  (define (add-complex z1 z2)
@@ -142,7 +122,7 @@
 (define (install-polar-package)
  ;; internal procedures
  (define (angle z)
-  (cdr z))
+  (cadr z))
 
  (define (equ-polar? a b)
   (and (equ? (magnitude a) (magnitude b))
@@ -155,20 +135,21 @@
   (car z))
 
  (define (make-from-mag-ang r a)
-  (cons r a))
+  (list r a))
 
  (define (make-from-real-imag x y)
-  (cons (sqroot (add (square x) (square y))) (arctan y x)))
+  (list (sqroot (add (square x) (square y))) (arctan y x)))
 
  (define (project x)
-  (if (equ? (make-scheme-number 0) (imag-part x))
+  (if (equ? (make-scheme-number 0) (angle x))
    (magnitude x)
    #f))
 
  (define (real-part z)
   (mul (magnitude z) (cosine (angle z))))
 
- (define zero (make-from-mag-ang 0 0))
+ (define zero
+         (make-from-mag-ang (make-scheme-number 0) (make-scheme-number 0)))
  ;; interface to the rest of the system
  (define (tag x)
   (attach-tag 'polar x))
@@ -206,7 +187,7 @@
   (make-rat (cos (/ (numer x) (denom x))) 1))
 
  (define (denom x)
-  (cdr x))
+  (cadr x))
 
  (define (div-rat x y)
   (make-rat (* (numer x) (denom y)) (* (denom x) (numer y))))
@@ -222,7 +203,7 @@
 
  (define (make-rat n d)
   (let ((g (gcd n d)))
-   (cons (/ n g) (/ d g))))
+   (list (/ n g) (/ d g))))
 
  (define (mul-rat x y)
   (make-rat (* (numer x) (numer y)) (* (denom x) (denom y))))
@@ -310,26 +291,27 @@
        (equ? (imag-part a) (imag-part b))))
 
  (define (imag-part z)
-  (cdr z))
+  (cadr z))
 
  (define (magnitude z)
   (sqroot (add (square (real-part z)) (square (imag-part z)))))
 
  (define (make-from-mag-ang r a)
-  (cons (* r (cos a)) (* r (sin a))))
+  (list (mul r (cosine a)) (mul r (sine a))))
 
  (define (make-from-real-imag x y)
-  (cons x y))
+  (list x y))
 
  (define (project x)
-  (if (equ? (make-scheme-number 0) (real-part x))
+  (if (equ? (make-scheme-number 0) (imag-part x))
    (real-part x)
    #f))
 
  (define (real-part z)
   (car z))
 
- (define zero (make-from-real-imag 0 0))
+ (define zero
+         (make-from-real-imag (make-scheme-number 0) (make-scheme-number 0)))
  ;; interface to the rest of the system
  (define (tag x)
   (attach-tag 'rectangular x))
@@ -429,10 +411,30 @@
  (apply-generic 'magnitude z))
 
 (define (make-complex-from-mag-ang r a)
- ((get 'make-from-mag-ang 'complex) r a))
+ (let ((r (cond
+           ((number? r)
+            (make-scheme-number r))
+           (else
+            r)))
+       (a (cond
+           ((number? a)
+            (make-scheme-number a))
+           (else
+            a))))
+  ((get 'make-from-mag-ang 'complex) r a)))
 
 (define (make-complex-from-real-imag x y)
- ((get 'make-from-real-imag 'complex) x y))
+ (let ((x (cond
+           ((number? x)
+            (make-scheme-number x))
+           (else
+            x)))
+       (y (cond
+           ((number? y)
+            (make-scheme-number y))
+           (else
+            y))))
+  ((get 'make-from-real-imag 'complex) x y)))
 
 (define (make-rational n d)
  ((get 'make 'rational) n d))
