@@ -47,6 +47,5 @@
 (map (lambda (k)
       (print-line "k:" k " " (length (queens k))))
      (enumerate-interval 1 8))
-(map (lambda (k)))
 ((time queens) 8)
 ((time slow-queens) 8)
