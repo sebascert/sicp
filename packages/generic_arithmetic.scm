@@ -32,6 +32,12 @@
     (else
      (fail))))))
 
+(define (arctan x y)
+ (apply-generic 'arctan x y))
+
+(define (cosine x)
+ (apply-generic 'cosine x))
+
 (define (div x y)
  (apply-generic 'div x y))
 
@@ -50,27 +56,47 @@
 (define (install-complex-package)
  ;; imported procedures from rectangular and polar packages
  (define (make-from-mag-ang r a)
-  ((get 'make-from-mag-ang 'polar) r a))
+  (let ((r (cond
+            ((number? r)
+             (make-scheme-number r))
+            (else
+             r)))
+        (a (cond
+            ((number? a)
+             (make-scheme-number a))
+            (else
+             a))))
+   ((get 'make-from-mag-ang 'polar) r a)))
 
  (define (make-from-real-imag x y)
-  ((get 'make-from-real-imag 'rectangular) x y))
+  (let ((x (cond
+            ((number? x)
+             (make-scheme-number x))
+            (else
+             x)))
+        (y (cond
+            ((number? y)
+             (make-scheme-number y))
+            (else
+             y))))
+   ((get 'make-from-real-imag 'rectangular) x y)))
 
  ;; internal procedures
  (define (add-complex z1 z2)
-  (make-from-real-imag (+ (real-part z1) (real-part z2))
-                       (+ (imag-part z1) (imag-part z2))))
+  (make-from-real-imag (add (real-part z1) (real-part z2))
+                       (add (imag-part z1) (imag-part z2))))
 
  (define (div-complex z1 z2)
-  (make-from-mag-ang (/ (magnitude z1) (magnitude z2))
-                     (- (angle z1) (angle z2))))
+  (make-from-mag-ang (div (magnitude z1) (magnitude z2))
+                     (sub (angle z1) (angle z2))))
 
  (define (mul-complex z1 z2)
-  (make-from-mag-ang (* (magnitude z1) (magnitude z2))
-                     (+ (angle z1) (angle z2))))
+  (make-from-mag-ang (mul (magnitude z1) (magnitude z2))
+                     (mul (angle z1) (angle z2))))
 
  (define (sub-complex z1 z2)
-  (make-from-real-imag (- (real-part z1) (real-part z2))
-                       (- (imag-part z1) (imag-part z2))))
+  (make-from-real-imag (sub (real-part z1) (real-part z2))
+                       (sub (imag-part z1) (imag-part z2))))
 
  ;; interface to rest of the system
  (define (tag z)
@@ -118,12 +144,12 @@
  (define (angle z)
   (cdr z))
 
- (define (equ? a b)
-  (and (= (magnitude a) (magnitude b))
-       (= (angle a) (angle b))))
+ (define (equ-polar? a b)
+  (and (equ? (magnitude a) (magnitude b))
+       (equ? (angle a) (angle b))))
 
  (define (imag-part z)
-  (* (magnitude z) (sin (angle z))))
+  (mul (magnitude z) (sine (angle z))))
 
  (define (magnitude z)
   (car z))
@@ -132,15 +158,15 @@
   (cons r a))
 
  (define (make-from-real-imag x y)
-  (cons (sqrt (+ (square x) (square y))) (atan y x)))
+  (cons (sqroot (add (square x) (square y))) (arctan y x)))
 
- (define (project-to-rational x)
-  (if (= 0 (imag-part x))
-   (make-rational (magnitude x) 1)
+ (define (project x)
+  (if (equ? (make-scheme-number 0) (imag-part x))
+   (magnitude x)
    #f))
 
  (define (real-part z)
-  (* (magnitude z) (cos (angle z))))
+  (mul (magnitude z) (cosine (angle z))))
 
  (define zero (make-from-mag-ang 0 0))
  ;; interface to the rest of the system
@@ -159,12 +185,12 @@
       'polar
       (lambda (r a)
        (tag (make-from-mag-ang r a))))
- (put 'equ? '(polar polar) equ?)
+ (put 'equ? '(polar polar) equ-polar?)
  (put 'zero?
       '(polar)
       (lambda (x)
-       (equ? x zero)))
- (put 'project '(polar) project-to-rational)
+       (equ-polar? x zero)))
+ (put 'project '(polar) project)
  'done)
 
 (define (install-rational-package)
@@ -172,6 +198,12 @@
  (define (add-rat x y)
   (make-rat (+ (* (numer x) (denom y)) (* (numer y) (denom x)))
             (* (denom x) (denom y))))
+
+ (define (arctan x y)
+  (make-rat (atan (/ (numer x) (denom x)) (/ (numer y) (denom y))) 1))
+
+ (define (cosine x)
+  (make-rat (cos (/ (numer x) (denom x))) 1))
 
  (define (denom x)
   (cdr x))
@@ -198,8 +230,21 @@
  (define (numer x)
   (car x))
 
- (define (project-to-scheme-number x)
-  (make-scheme-number (/ (numer x) (denom x))))
+ (define (project x)
+  (if (= 1 (denom x))
+   (make-scheme-number (numer x))
+   #f))
+
+ (define (sine x)
+  (make-rate (sin (/ (numer x) (denom x))) 1))
+
+ (define (sqroot x)
+  (make-rate (sqrt (numer x)) (sqrt (denom x))))
+
+ (define (square x)
+  (let ((n (numer x))
+        (d (denom x)))
+   (make-rate (* n n) (* d d))))
 
  (define (sub-rat x y)
   (make-rat (- (* (numer x) (denom y)) (* (numer y) (denom x)))
@@ -247,23 +292,28 @@
       '(rational)
       (lambda (x)
        2))
- (put 'project '(rational) project-to-scheme-number)
+ (put 'project '(rational) project)
+ (put 'square '(rational) square)
+ (put 'sqroot '(rational) sqroot)
+ (put 'cosine '(rational) cosine)
+ (put 'sine '(rational) sine)
+ (put 'arctan '(rational rational) arctan)
  'done)
 
 (define (install-rectangular-package)
  ;; internal procedures
  (define (angle z)
-  (atan (imag-part z) (real-part z)))
+  (arctan (imag-part z) (real-part z)))
 
- (define (equ? a b)
-  (and (= (real-part a) (real-part b))
-       (= (imag-part a) (imag-part b))))
+ (define (equ-rectangular? a b)
+  (and (equ? (real-part a) (real-part b))
+       (equ? (imag-part a) (imag-part b))))
 
  (define (imag-part z)
   (cdr z))
 
  (define (magnitude z)
-  (sqrt (+ (square (real-part z)) (square (imag-part z)))))
+  (sqroot (add (square (real-part z)) (square (imag-part z)))))
 
  (define (make-from-mag-ang r a)
   (cons (* r (cos a)) (* r (sin a))))
@@ -271,9 +321,9 @@
  (define (make-from-real-imag x y)
   (cons x y))
 
- (define (project-to-rational x)
-  (if (= 0 (imag-part x))
-   (make-rational (real-part x) 1)
+ (define (project x)
+  (if (equ? (make-scheme-number 0) (real-part x))
+   (real-part x)
    #f))
 
  (define (real-part z)
@@ -296,12 +346,12 @@
       'rectangular
       (lambda (r a)
        (tag (make-from-mag-ang r a))))
- (put 'equ? '(rectangular rectangular) equ?)
+ (put 'equ? '(rectangular rectangular) equ-rectangular?)
  (put 'zero?
       '(rectangular)
       (lambda (x)
-       (equ? x zero)))
- (put 'project '(rectangular) project-to-rational)
+       (equ-rectangular? x zero)))
+ (put 'project '(rectangular) project)
  'done)
 
 (define (install-scheme-number-package)
@@ -344,10 +394,33 @@
       '(scheme-number)
       (lambda (x)
        1))
+ (put 'square
+      '(scheme-number)
+      (lambda (x)
+       (tag (* x x))))
+ (put 'sqroot
+      '(scheme-number)
+      (lambda (x)
+       (tag (sqrt x))))
+ (put 'cosine
+      '(scheme-number)
+      (lambda (x)
+       (tag (cos x))))
+ (put 'sine
+      '(scheme-number)
+      (lambda (x)
+       (tag (sin x))))
+ (put 'arctan
+      '(scheme-number scheme-number)
+      (lambda (x y)
+       (tag (atan x y))))
  'done)
 
 (define (inv x)
  (apply-generic 'inv x))
+
+(define (is? num type)
+ (eq? (type-tag num) type))
 
 (define (level num)
  (safe-apply-generic 'level num))
@@ -392,6 +465,15 @@
 
 (define (real-part z)
  (apply-generic 'real-part z))
+
+(define (sine x)
+ (apply-generic 'sine x))
+
+(define (sqroot x)
+ (apply-generic 'sqroot x))
+
+(define (square x)
+ (apply-generic 'square x))
 
 (define (sub x y)
  (apply-generic 'sub x y))
